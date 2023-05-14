@@ -568,8 +568,15 @@ open class SCLAlertView: UIViewController {
     }
     
     @discardableResult
-    open func addButton(_ title:String, backgroundColor:UIColor? = nil, textColor:UIColor? = nil, showTimeout:SCLButton.ShowTimeoutConfiguration? = nil, action:@escaping ()->Void)->SCLButton {
-        let btn = addButton(title, backgroundColor: backgroundColor, textColor: textColor, showTimeout: showTimeout)
+    open func addButton(_ title:String,
+                        backgroundColor:UIColor? = nil,
+                        textColor:UIColor? = nil,
+                        showTimeout:SCLButton.ShowTimeoutConfiguration? = nil,
+                        icon: UIImage? = nil,
+                        tint: UIColor? = nil,
+                        edgeInsets: UIEdgeInsets? = nil,
+                        action:@escaping ()->Void)->SCLButton {
+        let btn = addButton(title, backgroundColor: backgroundColor, textColor: textColor, showTimeout: showTimeout, icon: icon, tint: tint, edgeInsets: edgeInsets)
         btn.actionType = SCLActionType.closure
         btn.action = action
         btn.addTarget(self, action:#selector(SCLAlertView.buttonTapped(_:)), for:.touchUpInside)
@@ -579,7 +586,12 @@ open class SCLAlertView: UIViewController {
     }
     
     @discardableResult
-    open func addButton(_ title:String, backgroundColor:UIColor? = nil, textColor:UIColor? = nil, showTimeout:SCLButton.ShowTimeoutConfiguration? = nil, target:AnyObject, selector:Selector)->SCLButton {
+    open func addButton(_ title:String,
+                        backgroundColor:UIColor? = nil,
+                        textColor:UIColor? = nil,
+                        showTimeout:SCLButton.ShowTimeoutConfiguration? = nil,
+                        target:AnyObject,
+                        selector:Selector)->SCLButton {
         let btn = addButton(title, backgroundColor: backgroundColor, textColor: textColor, showTimeout: showTimeout)
         btn.actionType = SCLActionType.selector
         btn.target = target
