@@ -591,7 +591,15 @@ open class SCLAlertView: UIViewController {
     }
     
     @discardableResult
-    fileprivate func addButton(_ title:String, backgroundColor:UIColor? = nil, textColor:UIColor? = nil, showTimeout:SCLButton.ShowTimeoutConfiguration? = nil)->SCLButton {
+    fileprivate func addButton(_
+                               title:String,
+                               backgroundColor:UIColor? = nil,
+                               textColor:UIColor? = nil,
+                               showTimeout:SCLButton.ShowTimeoutConfiguration? = nil,
+                               icon: UIImage? = nil,
+                               tint: UIColor? = nil,
+                               edgeInsets: UIEdgeInsets? = nil
+    )->SCLButton {
         // Update view height
         appearance.setkWindowHeight(appearance.kWindowHeight + appearance.kButtonHeight)
         
@@ -604,6 +612,18 @@ open class SCLAlertView: UIViewController {
         btn.customTextColor = textColor
         btn.initialTitle = title
         btn.showTimeout = showTimeout
+        btn.setImage(icon, for: .normal)
+        if let tint = tint {
+            btn.tintColor = tint
+        }
+        if let icon = icon {
+            let image = icon
+            btn.setImage(image, for: .normal)
+            btn.imageView?.contentMode = .scaleAspectFit;
+        }
+        if let edgeInsets = edgeInsets {
+            btn.imageEdgeInsets = edgeInsets
+        }
         contentView.addSubview(btn)
         buttons.append(btn)
         return btn
