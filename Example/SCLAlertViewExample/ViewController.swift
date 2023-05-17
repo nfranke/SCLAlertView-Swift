@@ -33,8 +33,17 @@ class ViewController: UIViewController {
     }
     
     @IBAction func showSuccess(_ sender: AnyObject) {
+        
+        let attributedString = NSMutableAttributedString(string: "fdasfsaf fdsafsda\n")
+
+        let attributes1: [NSAttributedString.Key : Any] = [
+           .font: UIFont(name: "HelveticaNeue", size: 18)!
+        ]
+        attributedString.addAttributes(attributes1, range: NSRange(location: 9, length: 8))
+        
+        
 		let alert = SCLAlertView()
-		_ = alert.addButton("First Button", target:self, selector:#selector(ViewController.firstButton))
+        _ = alert.addButton(NSAttributedString(attributedString: attributedString), action: {})
 		_ = alert.addButton("Second Button") {
 			print("Second button tapped")
 		}

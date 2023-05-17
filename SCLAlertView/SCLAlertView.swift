@@ -572,11 +572,23 @@ open class SCLAlertView: UIViewController {
                         backgroundColor:UIColor? = nil,
                         textColor:UIColor? = nil,
                         showTimeout:SCLButton.ShowTimeoutConfiguration? = nil,
-                        icon: UIImage? = nil,
-                        tint: UIColor? = nil,
-                        edgeInsets: UIEdgeInsets? = nil,
                         action:@escaping ()->Void)->SCLButton {
-        let btn = addButton(title, backgroundColor: backgroundColor, textColor: textColor, showTimeout: showTimeout, icon: icon, tint: tint, edgeInsets: edgeInsets)
+        let btn = addButton(title, backgroundColor: backgroundColor, textColor: textColor, showTimeout: showTimeout)
+        btn.actionType = SCLActionType.closure
+        btn.action = action
+        btn.addTarget(self, action:#selector(SCLAlertView.buttonTapped(_:)), for:.touchUpInside)
+        btn.addTarget(self, action:#selector(SCLAlertView.buttonTapDown(_:)), for:[.touchDown, .touchDragEnter])
+        btn.addTarget(self, action:#selector(SCLAlertView.buttonRelease(_:)), for:[.touchUpInside, .touchUpOutside, .touchCancel, .touchDragOutside] )
+        return btn
+    }
+    
+    @discardableResult
+    open func addButton(_ title: NSAttributedString,
+                        backgroundColor:UIColor? = nil,
+                        textColor:UIColor? = nil,
+                        showTimeout:SCLButton.ShowTimeoutConfiguration? = nil,
+                        action:@escaping ()->Void)->SCLButton {
+        let btn = addButton(title, backgroundColor: backgroundColor, textColor: textColor, showTimeout: showTimeout)
         btn.actionType = SCLActionType.closure
         btn.action = action
         btn.addTarget(self, action:#selector(SCLAlertView.buttonTapped(_:)), for:.touchUpInside)
@@ -607,10 +619,7 @@ open class SCLAlertView: UIViewController {
                                title:String,
                                backgroundColor:UIColor? = nil,
                                textColor:UIColor? = nil,
-                               showTimeout:SCLButton.ShowTimeoutConfiguration? = nil,
-                               icon: UIImage? = nil,
-                               tint: UIColor? = nil,
-                               edgeInsets: UIEdgeInsets? = nil
+                               showTimeout:SCLButton.ShowTimeoutConfiguration? = nil
     )->SCLButton {
         // Update view height
         appearance.setkWindowHeight(appearance.kWindowHeight + appearance.kButtonHeight)
@@ -624,18 +633,30 @@ open class SCLAlertView: UIViewController {
         btn.customTextColor = textColor
         btn.initialTitle = title
         btn.showTimeout = showTimeout
-        btn.setImage(icon, for: .normal)
-        if let tint = tint {
-            btn.tintColor = tint
-        }
-        if let icon = icon {
-            let image = icon
-            btn.setImage(image, for: .normal)
-            btn.imageView?.contentMode = .scaleAspectFit;
-        }
-        if let edgeInsets = edgeInsets {
-            btn.imageEdgeInsets = edgeInsets
-        }
+        contentView.addSubview(btn)
+        buttons.append(btn)
+        return btn
+    }
+    
+    @discardableResult
+    fileprivate func addButton(_
+                               title:NSAttributedString,
+                               backgroundColor:UIColor? = nil,
+                               textColor:UIColor? = nil,
+                               showTimeout:SCLButton.ShowTimeoutConfiguration? = nil
+    )->SCLButton {
+        // Update view height
+        appearance.setkWindowHeight(appearance.kWindowHeight + appearance.kButtonHeight)
+        
+        // Add button
+        let btn = SCLButton()
+        btn.layer.masksToBounds = true
+        btn.setAttributedTitle(title, for: .normal)
+        btn.titleLabel?.font = appearance.kButtonFont
+        btn.customBackgroundColor = backgroundColor
+        btn.customTextColor = textColor
+        btn.initialTitle = title.string
+        btn.showTimeout = showTimeout
         contentView.addSubview(btn)
         buttons.append(btn)
         return btn
