@@ -816,7 +816,7 @@ open class SCLAlertView: UIViewController {
         view.alpha = 0
         view.tag = uniqueTag
         view.accessibilityIdentifier = uniqueAccessibilityIdentifier
-        let rv = UIApplication.shared.keyWindow! as UIWindow
+        let rv = UIApplication.shared.delegate!.window
         rv.addSubview(view)
         view.frame = rv.bounds
         baseView.frame = rv.bounds
